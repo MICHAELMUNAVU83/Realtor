@@ -40,7 +40,7 @@ const NewReservation = () => {
       user_id: user.data.id,
       total: totalPrice,
     };
-    await axios.post('https://my-yatch-house.herokuapp.com/api/v1/reservations', { reservation })
+    await axios.post('/api/v1/reservations', { reservation })
       .then(() => {
         const url = `${process.env.PUBLIC_URL}/my_reservation`;
         history(url);

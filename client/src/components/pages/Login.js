@@ -28,7 +28,7 @@ const Login = () => {
     setShow(true);
     dispatch({ type: 'LOGIN_START' });
     try {
-      const res = await axios.post('https://my-yatch-house.herokuapp.com/users/sign_in',
+      const res = await axios.post('/users/sign_in',
         { user: credential });
       console.log(res);
       if (res.data.data.id != null) {

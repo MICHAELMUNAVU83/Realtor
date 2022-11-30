@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined';
-import { Navigate } from 'react-router';
-import { NotificationManager } from 'react-notifications';
-import Loader from './Loader';
-import './pages/house.css';
+/* eslint-disable */
+import React, { useState } from "react";
+import axios from "axios";
+import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+import { Navigate } from "react-router";
+import { NotificationManager } from "react-notifications";
+import Loader from "./Loader";
+import "./pages/house.css";
 
 /* eslint no-return-assign: "error" */
+
+
+
 const validateForm = (errors) => {
   let valid = true;
   Object.values(errors).forEach((val) => val.length > 0 && (valid = false));
@@ -14,14 +18,14 @@ const validateForm = (errors) => {
 };
 
 const HouseForm = () => {
-  const [file, setFile] = useState('');
+  const [file, setFile] = useState("");
   const [house, setHouse] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({
-    name: '',
-    description: '',
-    price: '',
-    location: '',
+    name: "",
+    description: "",
+    price: "",
+    location: "",
   });
 
   const handleChange = (e) => {
@@ -29,17 +33,20 @@ const HouseForm = () => {
     const { name, value } = e.target;
     const error = errors;
     switch (name) {
-      case 'name':
-        error.name = value.length < 5 ? 'Name must be 5 characters long!' : '';
+      case "name":
+        error.name = value.length < 5 ? "Name must be 5 characters long!" : "";
         break;
-      case 'description':
-        error.description = value.length < 10 ? 'Description must be 10 characters long!' : '';
+      case "description":
+        error.description =
+          value.length < 10 ? "Description must be 10 characters long!" : "";
         break;
-      case 'price':
-        error.price = value.length < 1 ? 'Price must be 1 characters long!' : '';
+      case "price":
+        error.price =
+          value.length < 1 ? "Price must be 1 characters long!" : "";
         break;
-      case 'location':
-        error.location = value.length < 5 ? 'Location must be 5 characters long!' : '';
+      case "location":
+        error.location =
+          value.length < 5 ? "Location must be 5 characters long!" : "";
         break;
       default:
         break;
@@ -50,26 +57,28 @@ const HouseForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm(errors)) {
-      console.info('Valid Form');
+      console.info("Valid Form");
     } else {
       console.error(errors);
     }
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'upload');
+    formData.append("file", file);
+    formData.append("upload_preset", "upload");
     try {
-      const uploadRes = await axios.post('https://api.cloudinary.com/v1_1/baroka/image/upload',
-        formData);
+      const uploadRes = await axios.post(
+        "https://api.cloudinary.com/v1_1/baroka/image/upload",
+        formData
+      );
       const { url } = uploadRes.data;
       const houseInfo = { ...house, image: url };
-      await axios.post('https://my-yatch-house.herokuapp.com/api/v1/houses', { house: houseInfo });
+      await axios.post("/api/v1/houses", { house: houseInfo });
     } catch (err) {
       console.log(err);
     }
     setIsLoading(false);
-    NotificationManager.success('House added successfully', 'Success', 3000);
-    Navigate('/houses');
+    NotificationManager.success("House added successfully", "Success", 3000);
+    Navigate("/houses");
   };
 
   return (
@@ -79,28 +88,26 @@ const HouseForm = () => {
         <Loader />
       ) : (
         <form onSubmit={handleSubmit} className="form-container">
-          <div className="formInput" style={{ paddingBotton: '1rem' }}>
+          <div className="formInput" style={{ paddingBotton: "1rem" }}>
             <div className="image_form">
               <img
                 src={
                   file
                     ? URL.createObjectURL(file)
-                    : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                    : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
                 }
                 alt=""
-                style={{ height: '200px', width: '200px', borderRadius: '50%' }}
+                style={{ height: "200px", width: "200px", borderRadius: "50%" }}
               />
             </div>
             <label htmlFor="file">
-              Image:
-              {' '}
-              <DriveFolderUploadOutlinedIcon className="icon" />
+              Image: <DriveFolderUploadOutlinedIcon className="icon" />
             </label>
             <input
               type="file"
               id="file"
               onChange={(e) => setFile(e.target.files[0])}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
             />
           </div>
           <label htmlFor="name" className="form-label mb-3">
@@ -173,5 +180,7 @@ const HouseForm = () => {
     </div>
   );
 };
+
+/* eslint-enable */
 
 export default HouseForm;
